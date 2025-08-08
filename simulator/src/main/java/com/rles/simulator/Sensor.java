@@ -1,3 +1,4 @@
+package com.rles.simulator;
 // This class will represent the base class for all sensors.
 import java.util.Random;
 
