@@ -1,0 +1,7 @@
+# Eclipse/IDEA
+.classpath
+.project
+.settings/
+
+# Java build
+target/
