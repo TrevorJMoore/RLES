@@ -1,0 +1,44 @@
+{
+    "title": "Sensor",
+    "description": "A sensor within the RLES.",
+    "type": "object",
+    "properties": {
+        "sensorId": {
+            "description": "The unique identifier for a sensor.",
+            "type": "integer"
+        },
+        "sensorName": {
+            "description": "The name of the sensor.",
+            "type": "string"
+        },
+        "timestamp": {
+            "description": "The time the reading was taken.",
+            "type": "integer"
+        },
+        "sequence": {
+            "description": "Order in which the reading appears in the sequence.",
+            "type": "integer",
+            "minimum": 0
+        },
+        "measurementType": {
+            "description": "The type of measurement the sensor produces (Float, Boolean, etc.)",
+            "$comment": "TODO: add enum of measurement types"
+        },
+        "value": {
+            "description": "Value of the sensor's measurement.",
+            "$comment": "TODO: add oneOf branch"
+        },
+        "valueUnit": {
+            "description": "Unit of measurement for the value.",
+            "type": "string",
+            "$comment": "TODO: add enum of unit types"
+        },
+        "status": {
+            "description": "Sensor status flags of ON/OFF/STALE/WARN/FAULT.",
+            "type": "string",
+            "$comment": "TODO: add enum of status types"
+        }
+
+    },
+    "required": [ "sensorId", "timestamp", "value", "status" ]
+}
