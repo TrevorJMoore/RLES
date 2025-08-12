@@ -1,0 +1,64 @@
+{
+    "title": "Sensor",
+    "description": "A sensor within the RLES.",
+    "type": "object",
+    "properties": {
+        "sensorId": {
+            "description": "The unique identifier for a sensor.",
+            "type": "integer",
+            "minimum": 0
+        },
+        "sensorName": {
+            "description": "The name of the sensor.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+        },
+        "timestamp": {
+            "description": "The time the reading was taken. (Epoch ms)",
+            "type": "integer",
+            "minimum": 0
+        },
+        "sequence": {
+            "description": "Order in which the reading appears in the sequence.",
+            "type": "integer",
+            "minimum": 0
+        },
+        "measurementType": {
+            "description": "The type of measurement the sensor produces (Float, Integer, or Boolean).",
+            "type": "string",
+            "enum": ["FLOAT", "INTEGER", "BOOLEAN"]
+        },
+        "value": {
+            "description": "Value of the sensor's measurement."
+        },
+        "valueUnit": {
+            "description": "Unit of measurement for the value. Codes: 1=degrees C, 2=%, 3=hPa, 4=m/s, 5=degrees, 6=bar, 7=MPa, 8=kg/s, 9=V, 10=A, 11=ppm",
+            "type": "integer",
+            "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        },
+        "status": {
+            "description": "Sensor status flags of ON/OFF/STALE/WARN/FAULT.",
+            "type": "string",
+            "enum": ["ON", "OFF", "STALE", "WARN", "FAULT"]
+        }
+
+    },
+    "oneOf": [
+        { "properties": {
+                "measurementType": { "const": "FLOAT" },
+                "value": { "type": "number" }
+            
+        }},
+        { "properties": {
+                "measurementType": { "const": "INTEGER" },
+                "value": { "type": "integer" }
+        }},
+        { "properties": {
+                "measurementType": { "const": "BOOLEAN" },
+                "value": { "type": "boolean"}
+        }}
+    ],
+    "required": [ "sensorId", "timestamp", "measurementType", "value"],
+    "additionalProperties": false
+}
