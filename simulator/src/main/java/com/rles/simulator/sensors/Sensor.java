@@ -1,22 +1,10 @@
 package com.rles.simulator.sensors;
 
 import java.util.List;
+import com.rles.simulator.enums.DataType;
+import com.rles.simulator.enums.DeviceStatus;
 
 // This class will represent the base class for all sensors.
-
-// TODO: Move enums to own file
-enum DeviceStatus {
-	ACTIVE,
-	STALE,
-	DISCONNECTED
-}
-
-enum DataType {
-	FLOAT,
-	INTEGER,
-	BOOLEAN
-}
-
 public abstract class Sensor {
 
 	private final int sensorId;	
