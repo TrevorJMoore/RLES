@@ -1,12 +1,6 @@
 package com.rles.simulator.sensors;
 
-enum ReadingStatus {
-	ON,
-	OFF,
-	STALE,
-	WARN,
-	FAULT
-}
+import com.rles.simulator.enums.ReadingStatus;
 
 // Represents a reading from a sensor
 public class SensorReading{
