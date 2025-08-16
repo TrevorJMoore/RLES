@@ -6,9 +6,8 @@ import com.rles.simulator.sensors.SensorReading;
 
 public class AmbientHumiditySensor extends Sensor {
 
-	public AmbientHumiditySensor(int sensorId, String sensorName, DataType measurementType, int unitCode) {
-		super(sensorId, sensorName, measurementType, unitCode);
-		// TODO
+	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode) {
+		super(sensorId, sensorName, DataType.FLOAT, unitCode);
 	}
 
 	@Override
