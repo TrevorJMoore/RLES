@@ -26,8 +26,7 @@ public class ReadingGenerator {
 	
 	// Methods
 	public double generateValue(double min, double max, double grain) {
-		double raw = min + generator.nextDouble() * (max-min);
-		return Math.round(raw / grain) * grain;
+		return generator.nextDouble();
 	}
 	
 }
