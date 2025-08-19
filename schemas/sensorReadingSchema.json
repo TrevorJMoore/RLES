@@ -1,18 +1,12 @@
 {
-    "title": "Sensor",
-    "description": "A sensor within the RLES.",
+    "title": "Sensor Reading",
+    "description": "A sensor reading within the RLES.",
     "type": "object",
     "properties": {
         "sensorId": {
             "description": "The unique identifier for a sensor.",
             "type": "integer",
             "minimum": 0
-        },
-        "sensorName": {
-            "description": "The name of the sensor.",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 64
         },
         "timestamp": {
             "description": "The time the reading was taken. (Epoch ms)",

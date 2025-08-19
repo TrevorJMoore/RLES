@@ -9,7 +9,7 @@ public class SensorReading{
 	private final long timestamp;
 	private final int sequence;
 	private final double value;
-	private ReadingStatus readingStatus;
+	private final ReadingStatus readingStatus;
 	
 	public SensorReading(int sensorId, long timestamp, int sequence, double value, ReadingStatus readingStatus) {
 		this.sensorId = sensorId;
