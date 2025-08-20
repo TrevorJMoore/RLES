@@ -22,7 +22,7 @@ public class AmbientHumiditySensor extends Sensor {
 	private Double lastValue = null;
 	private int sequence = 0;
 	
-	
+	// Constructors
 	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode) {
 		super(sensorId, sensorName, DataType.FLOAT, unitCode);
 		this.gen = new ReadingGenerator();
