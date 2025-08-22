@@ -6,6 +6,12 @@ import com.rles.simulator.sensors.ReadingGenerator;
 import com.rles.simulator.sensors.Sensor;
 import com.rles.simulator.sensors.SensorReading;
 
+/*	AmbientHumiditySensor - Generates relative humidity readings
+ * 
+ *	Relative humidity is a percentage between 0-100%.
+ *	Relative humidity is reliant on ambient temperature and dewpoint.
+ *	TODO: Link AmbientHumiditySensor to AmbientTemperatureSensor reading results through some context to generate meaningful readings.
+ */
 public class AmbientHumiditySensor extends Sensor {
 	
 	// Config options
