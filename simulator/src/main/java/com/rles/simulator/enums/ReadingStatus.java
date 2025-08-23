@@ -8,9 +8,25 @@ package com.rles.simulator.enums;
  * FAULT - The reading is invalid due to malfunction or parameter beyond warning threshold.
  */
 public enum ReadingStatus {
-	ON,
-	OFF,
-	STALE,
-	WARN,
-	FAULT
+	ON((byte)0),
+	OFF((byte)1),
+	STALE((byte)2),
+	WARN((byte)3),
+	FAULT((byte)4);
+
+	private final byte code;
+	
+	ReadingStatus(byte code) {
+		this.code = code;
+	}
+	
+	public byte getCode() { return code; }
+	
+	public static ReadingStatus getStatus(byte code) {
+		for (ReadingStatus s : values()) {
+			if (s.code == code) return s;
+		}
+		return ReadingStatus.FAULT; // If we can't find the code, return it as a FAULT status
+	}
+	
 }

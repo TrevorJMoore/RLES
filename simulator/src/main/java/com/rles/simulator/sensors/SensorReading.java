@@ -25,5 +25,6 @@ public class SensorReading{
 	public int getSequence() { return sequence; }
 	public double getValue() { return value; }
 	public ReadingStatus getReadingStatus() { return readingStatus; }
+	public byte getStatusCode() { return readingStatus.getCode(); }
 	
 }
