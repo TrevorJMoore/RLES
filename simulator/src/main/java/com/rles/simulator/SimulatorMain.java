@@ -1,6 +1,7 @@
 package com.rles.simulator;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.rles.simulator.sensors.Sensor;
 import com.rles.simulator.sensors.environment.AmbientTemperatureSensor;
@@ -11,18 +12,23 @@ import com.rles.simulator.telemetry.Transport;
 public class SimulatorMain {
 
 	public static void main(String[] args) {
+		// Args pull
 		final String host = (args.length >= 1) ? args[0] : "127.0.0.1";
 		final int port = (args.length >= 2) ? Integer.parseInt(args[1]) : 7000;
 		final Simulator.OutputMode mode = (args.length >= 3) ? Simulator.OutputMode.valueOf(args[2].toUpperCase()) : Simulator.OutputMode.STREAM;
 		
+		// Set-up
 		SimulatorContext context = new SimulatorContext();
 		Transport transport = new Transport(host, port);
 		Encoder encoder = new Encoder();
 		Streamer streamer = new Streamer(encoder, transport, 1024, 64, 20);
 		Simulator sim = new Simulator(context, streamer, transport, mode);
 		
+		// Create sensors
 		Sensor temp = new AmbientTemperatureSensor(1001, "Ambient Temp", 1);
 		
+		
+		// Register sensors
 		sim.registerSensor(temp, 200);
 		
 		try {
