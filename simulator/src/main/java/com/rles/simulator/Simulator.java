@@ -3,6 +3,7 @@ package com.rles.simulator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -43,6 +44,12 @@ public class Simulator {
 	
 	public void registerSensor(Sensor sensor, long periodMs) {
 		sensors.add(new RegisteredSensor(sensor, Math.max((long)1, periodMs)));
+	}
+	
+	public void registerSensors(Map<Sensor, Long> list) {
+		for (Map.Entry<Sensor, Long> entry : list.entrySet()) {
+			registerSensor(entry.getKey(), entry.getValue());
+		}
 	}
 	
 	// Connect to transport and start stream (if needed), then schdule all sensors
