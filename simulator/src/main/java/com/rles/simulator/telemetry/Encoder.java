@@ -17,7 +17,7 @@ public class Encoder {
 	private static final byte FLAGS = 0x00;
 	
 	private static final int HEADER_SIZE = 8; // 2b-magic, 1b-version, 1b-flags, 4b-length
-	private static final int DATA_SIZE = 25; //4b-id, 8b-timestamp, 4b-sequence, 8b-value, 1b-status
+	private static final int DATA_SIZE = 26; //4b-id, 8b-timestamp, 4b-sequence, 8b-value, 1b-unit, 1b-status
 	private static final int CRC_SIZE = 4;
 	private static final int FRAME_SIZE = HEADER_SIZE + DATA_SIZE + CRC_SIZE;
 	
@@ -31,7 +31,8 @@ public class Encoder {
 	// timestamp - Long
 	// sequence - Integer
 	// value - Double
-	// status - Byte (ReadingStatus code)
+	// unit code - Byte (UnitCode)
+	// status - Byte (ReadingStatus)
 	public byte[] encode(SensorReading reading) {
 		ByteBuffer buf = ByteBuffer.allocate(FRAME_SIZE).order(ByteOrder.LITTLE_ENDIAN);
 		
@@ -47,7 +48,8 @@ public class Encoder {
 		buf.putLong(reading.getTimestamp());
 		buf.putInt(reading.getSequence());
 		buf.putDouble(reading.getValue());
-		buf.put(reading.getStatusCode());
+		buf.put(reading.getUnitCodeByte());
+		buf.put(reading.getStatusByte());
 		
 		// Cyclic Redundancy Check
 		byte[] arr = buf.array();
