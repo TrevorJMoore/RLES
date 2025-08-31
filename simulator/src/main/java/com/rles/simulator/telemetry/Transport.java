@@ -1,92 +1,10 @@
 package com.rles.simulator.telemetry;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 
-// Send encoded bytes
-public class Transport {
-	
-	private final String host;
-	private final int port;
-	private final int timeoutMs;
-	private final int bufferSize;
-	
-	private Socket socket;
-	private BufferedOutputStream stream;
-	private volatile boolean connected;
-
-	// Default Constructor - localhost:7000, 5000ms timeout, 16kb buff
-	public Transport() {
-		this("127.0.0.1", 7000, 5000, 16 * 1024);
-	}
-	
-	// 5000ms timeout, 16kb buff
-	public Transport(String host, int port) {
-		this(host, port, 5000, 16 * 1024);
-	}
-	
-	public Transport(String host, int port, int timeoutMs, int bufferSize) {
-		this.host = host;
-		this.port = port;
-		this.timeoutMs = timeoutMs;
-		this.bufferSize = bufferSize;
-	}
-	
-	// Establish a connection
-	public synchronized void connect() throws IOException {
-		if (connected) return;
-		// Create and connect to socket
-		socket = new Socket();
-		socket.connect(new InetSocketAddress(host,port), timeoutMs);
-		socket.setTcpNoDelay(true);
-		stream = new BufferedOutputStream(socket.getOutputStream(), bufferSize);
-		connected = true;
-	}
-	
-	// Send a frame of bytes to the destination
-	public synchronized void send(byte[] frame) throws IOException {
-		ensureConnected(); 
-		// If connected, write frame to stream
-		stream.write(frame);
-	}
-	
-	// Force write any in-buffer data
-	public synchronized void flush() throws IOException {
-		if (!connected) return;
-		stream.flush();
-	}
-	
-	// Close the connection
-	public synchronized void close() {
-		try {
-			// If we have a current stream, try flushing and closing
-			if (stream != null) {
-				try { 
-					stream.flush(); 
-				} catch (IOException e) {}
-				try {
-					stream.close();
-				} catch (IOException e) {}
-			}
-		} finally {
-			// Set stream and socket to null
-			stream = null;
-			if (socket != null) {
-				try {
-					socket.close();
-				} catch (IOException e) {}
-			}
-			socket = null;
-			connected = false;
-		}
-	}
-	
-	private void ensureConnected() throws IOException {
-		if (!connected || socket == null || stream == null) {
-			throw new IOException("Transport layer not connected");
-		}
-	}
-	
+public interface Transport {
+	void connect() throws IOException;
+	void send(byte[] frame) throws IOException;
+	void flush() throws IOException;
+	void close();
 }
