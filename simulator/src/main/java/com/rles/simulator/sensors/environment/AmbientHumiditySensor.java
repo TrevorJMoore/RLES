@@ -3,6 +3,7 @@ package com.rles.simulator.sensors.environment;
 import com.rles.simulator.SimulatorContext;
 import com.rles.simulator.enums.DataType;
 import com.rles.simulator.enums.ReadingStatus;
+import com.rles.simulator.enums.UnitCode;
 import com.rles.simulator.sensors.ReadingGenerator;
 import com.rles.simulator.sensors.Sensor;
 import com.rles.simulator.sensors.SensorReading;
@@ -90,7 +91,9 @@ public class AmbientHumiditySensor extends Sensor {
 		if (value >= WARN_THRESHOLD) status = ReadingStatus.WARN;
 		if (value >= FAULT_THRESHOLD) status = ReadingStatus.FAULT;	
 		
-		return new SensorReading(getSensorId(), System.currentTimeMillis(), sequence++, value, status);
+		UnitCode unitcode = UnitCode.PERCENT;
+		
+		return new SensorReading(getSensorId(), System.currentTimeMillis(), sequence++, value, unitcode , status);
 		
 	}
 

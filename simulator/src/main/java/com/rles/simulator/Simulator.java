@@ -73,13 +73,14 @@ public class Simulator {
 						// LOG
 						if (outputMode == OutputMode.LOG || outputMode == OutputMode.BOTH) {
 							System.out.printf(
-								"[Log] %s | Sensor %d | Seq %d | Time %d | Status=%s | Value=%.3f%n",
+								"[Log] %s | Sensor %d | Seq %d | Time %d | Status=%s | Value=%.3f%s%n",
 								rs.sensor.getSensorName(),
 								r.getSensorId(),
 								r.getSequence(),
 								r.getTimestamp(),
 								r.getReadingStatus(),
-								r.getValue()
+								r.getValue(),
+								r.getUnitCodeSymbol()
 							);
 						}
 						
