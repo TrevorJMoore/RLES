@@ -34,24 +34,24 @@ public class AmbientHumiditySensor extends Sensor {
 	private final Integer dewpointSensorId;
 	
 	// Constructors
-	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode) {
-		super(sensorId, sensorName, DataType.FLOAT, unitCode);
+	public AmbientHumiditySensor(int sensorId, String sensorName) {
+		super(sensorId, sensorName, DataType.FLOAT);
 		this.gen = new ReadingGenerator();
 		this.context = null;
 		this.tempSensorId = null;
 		this.dewpointSensorId = null;
 	}
 	
-	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, SimulatorContext context, Integer tempSensorId, Integer dewpointSensorId) {
-		super(sensorId, sensorName, DataType.FLOAT, unitCode);
+	public AmbientHumiditySensor(int sensorId, String sensorName, SimulatorContext context, Integer tempSensorId, Integer dewpointSensorId) {
+		super(sensorId, sensorName, DataType.FLOAT);
 		this.gen = new ReadingGenerator();
 		this.context = context;
 		this.tempSensorId = tempSensorId;
 		this.dewpointSensorId = dewpointSensorId;
 	}
 	
-	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, SimulatorContext context, Integer tempSensorId, Integer dewpointSensorId, long seed) {
-		super(sensorId, sensorName, DataType.FLOAT, unitCode);
+	public AmbientHumiditySensor(int sensorId, String sensorName, SimulatorContext context, Integer tempSensorId, Integer dewpointSensorId, long seed) {
+		super(sensorId, sensorName, DataType.FLOAT);
 		this.gen = new ReadingGenerator(seed);
 		this.context = context;
 		this.tempSensorId = tempSensorId;
@@ -66,7 +66,7 @@ public class AmbientHumiditySensor extends Sensor {
 		if (tempSensorId == null || dewpointSensorId == null || context == null) {
 			double base;
 			if (lastValue == null) {
-				base = gen.uniform(10.0, 15.0);
+				base = gen.uniform(20, 30.0);
 			} else {
 				base = gen.randomWalkClamped(lastValue,  MAX_STEP,  MIN,  MAX);
 				base += gen.gaussian(0, NOISE_SIGMA);

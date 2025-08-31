@@ -30,9 +30,9 @@ public class SimulatorMain {
 		Simulator sim = new Simulator(context, streamer, transport, mode);
 		
 		// Create sensors
-		Sensor temp = new AmbientTemperatureSensor(1001, "Ambient Temp", 1);
-		Sensor dew = new DewPointSensor(1002, "Dew Point", 1);
-		Sensor humidity = new AmbientHumiditySensor(1003, "Relative Humidity", 5, context, temp.getSensorId(), dew.getSensorId());
+		Sensor temp = new AmbientTemperatureSensor(1001, "Ambient Temp");
+		Sensor dew = new DewPointSensor(1002, "Dew Point");
+		Sensor humidity = new AmbientHumiditySensor(1003, "Relative Humidity", context, temp.getSensorId(), dew.getSensorId());
 		
 		
 		
