@@ -6,6 +6,7 @@ import java.util.List;
 import com.rles.simulator.datastructures.CircularBuffer;
 import com.rles.simulator.enums.DataType;
 import com.rles.simulator.enums.DeviceStatus;
+import com.rles.simulator.enums.UnitCode;
 
 // This class will represent the base class for all sensors.
 public abstract class Sensor {
@@ -13,32 +14,30 @@ public abstract class Sensor {
 	private final int sensorId;	
 	private String sensorName;
 	private final DataType measurementType;
-	private final int unitCode;
 	private DeviceStatus deviceStatus;
 	private final CircularBuffer<SensorReading> history;
 	// TODO: Move magic numbers into config.
 	private static final int HISTORY_CAPACITY = 256;
 	
 	// Constructor uses default capacity for buffer
-	public Sensor(int sensorId, String sensorName, DataType measurementType, int unitCode) {
-		this(sensorId, sensorName, measurementType, unitCode, HISTORY_CAPACITY);
+	public Sensor(int sensorId, String sensorName, DataType measurementType) {
+		this(sensorId, sensorName, measurementType, HISTORY_CAPACITY);
 	}
 	
 	// Constructor uses parameter capacity for buffer
-	public Sensor(int sensorId, String sensorName, DataType measurementType, int unitCode, int historyCapacity) {
+	public Sensor(int sensorId, String sensorName, DataType measurementType, int historyCapacity) {
 		this.sensorId = sensorId;
 		this.sensorName = sensorName;
 		this.measurementType = measurementType;
-		this.unitCode = unitCode;
 		this.deviceStatus = DeviceStatus.ACTIVE;
 		this.history = new CircularBuffer<SensorReading>(historyCapacity);
 	}
+	
 	
 	// Accessor methods
 	public int getSensorId() { return sensorId; }
 	public String getSensorName() { return sensorName; }
 	public DataType getMeasurementType() { return measurementType; }
-	public int getUnitCode() { return unitCode; }
 	public DeviceStatus getDeviceStatus() { return deviceStatus; }
 	
 	// Mutator methods

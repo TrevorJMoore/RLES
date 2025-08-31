@@ -23,8 +23,8 @@ public class DewPointSensor extends Sensor {
 	private Double lastValue = null;
 	private int sequence = 0;
 	
-	public DewPointSensor(int sensorId, String sensorName, int unitCode) {
-		super(sensorId, sensorName, DataType.FLOAT, unitCode);
+	public DewPointSensor(int sensorId, String sensorName) {
+		super(sensorId, sensorName, DataType.FLOAT);
 		this.gen = new ReadingGenerator();
 	}
 	
