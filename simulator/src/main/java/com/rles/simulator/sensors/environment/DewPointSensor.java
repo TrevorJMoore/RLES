@@ -6,7 +6,8 @@ import com.rles.simulator.sensors.ReadingGenerator;
 import com.rles.simulator.sensors.Sensor;
 import com.rles.simulator.sensors.SensorReading;
 
-public class AmbientTemperatureSensor extends Sensor {
+public class DewPointSensor extends Sensor {
+	
 	// CONFIG
 	private static final double MIN = -60.0; // Celsius
 	private static final double MAX = 100.0; // Celsius
@@ -15,22 +16,22 @@ public class AmbientTemperatureSensor extends Sensor {
 	private static final double NOISE_SIGMA = 0.2;
 	private static final double WARN_THRESHOLD = 50.0;
 	private static final double FAULT_THRESHOLD = 60.0;
-	
+		
 	// State
 	private final ReadingGenerator gen;
 	private Double lastValue = null;
 	private int sequence = 0;
-
-	public AmbientTemperatureSensor(int sensorId, String sensorName, int unitCode) {
+	
+	public DewPointSensor(int sensorId, String sensorName, int unitCode) {
 		super(sensorId, sensorName, DataType.FLOAT, unitCode);
 		this.gen = new ReadingGenerator();
 	}
-
+	
 	@Override
 	public SensorReading generateReading() {
 		double base;
 		if (lastValue == null) {
-			base = gen.uniform(20.0, 25.0);
+			base = gen.uniform(10.0, 15.0);
 		} else {
 			base = gen.randomWalkClamped(lastValue,  MAX_STEP,  MIN,  MAX);
 			base += gen.gaussian(0, NOISE_SIGMA);
@@ -44,5 +45,5 @@ public class AmbientTemperatureSensor extends Sensor {
 		
 		return new SensorReading(getSensorId(), System.currentTimeMillis(), sequence++, value, status);
 	}
-
+	
 }

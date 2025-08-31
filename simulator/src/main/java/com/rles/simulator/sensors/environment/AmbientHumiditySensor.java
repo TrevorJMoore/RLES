@@ -1,5 +1,6 @@
 package com.rles.simulator.sensors.environment;
 
+import com.rles.simulator.SimulatorContext;
 import com.rles.simulator.enums.DataType;
 import com.rles.simulator.enums.ReadingStatus;
 import com.rles.simulator.sensors.ReadingGenerator;
@@ -21,59 +22,73 @@ public class AmbientHumiditySensor extends Sensor {
 	private static final double MAX_STEP = 1.0;
 	private static final double NOISE_SIGMA = 0.3;
 	private static final double WARN_THRESHOLD = 90.0;
-	private static final double FAULT_THRESHOLD = 98.0;
+	private static final double FAULT_THRESHOLD = 100.0;
 	
 	// State
 	private final ReadingGenerator gen;
 	private Double lastValue = null;
 	private int sequence = 0;
+	private SimulatorContext context;
+	private Sensor temperatureSensor;
+	private Sensor dewpointSensor;
 	
 	// Constructors
-	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode) {
+	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, SimulatorContext context) {
 		super(sensorId, sensorName, DataType.FLOAT, unitCode);
 		this.gen = new ReadingGenerator();
+		this.context = context;
 	}
 	
-	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, long seed) {
+	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, SimulatorContext context, long seed) {
 		super(sensorId, sensorName, DataType.FLOAT, unitCode);
 		this.gen = new ReadingGenerator(seed);
+		this.context = context;
+	}
+	
+	// Methods
+	public void linkTemperatureSensor(Sensor temperatureSensor) {
+		this.temperatureSensor = temperatureSensor;
+	}
+	
+	public void linkDewPointSensor(Sensor dewpointSensor) {
+		this.dewpointSensor = dewpointSensor;
 	}
 	
 
-	// Generate our AmbientHumidity reading
+	// Generate our AmbientHumidity reading using the simulator context
 	@Override
 	public SensorReading generateReading() {
-		long time = System.currentTimeMillis();
-		
-		// Pick a base (mid on first tick) and random-walk
-		double base = (lastValue == null) ? 50.0 : lastValue;
-		double v = gen.randomWalkClamped(base, MAX_STEP, MIN, MAX);
-		
-		// Add noise and clamp
-		v += gen.gaussian(0.0, NOISE_SIGMA);
-		if (v < MIN) v = MIN;
-		if (v > MAX) v = MAX;
-		
-		// Quantize
-		v = gen.quantize(v, GRAIN);
-		
-		ReadingStatus status;
-		if (v >= FAULT_THRESHOLD) {
-			status = ReadingStatus.FAULT;
-		}
-		else if (v >= WARN_THRESHOLD) {
-			status = ReadingStatus.WARN;
-		}
-		else if (v == lastValue) {
-			status = ReadingStatus.STALE;
+		double value;
+		if (temperatureSensor == null || dewpointSensor == null) {
+			double base;
+			if (lastValue == null) {
+				base = gen.uniform(10.0, 15.0);
+			} else {
+				base = gen.randomWalkClamped(lastValue,  MAX_STEP,  MIN,  MAX);
+				base += gen.gaussian(0, NOISE_SIGMA);
+			}
+			value = gen.quantize(base, GRAIN);
+			lastValue = value;
 		}
 		else {
-			status = ReadingStatus.ON;
+			double temp = context.getLatest(temperatureSensor.getSensorId()).getValue();
+			double dewpoint = context.getLatest(dewpointSensor.getSensorId()).getValue();
+			
+			// These calculations come from the University of Miami: https://bmcnoldy.earth.miami.edu/Humidity.html
+			// where they use approximations of Magnus coefficients in their relative humidity equation
+			double expDew = (17.625*dewpoint)/(243.04+dewpoint);
+			double expTemp = (17.625*temp)/(243.04+temp);
+			double percentHumidity = Math.pow(Math.E, expDew)/Math.pow(Math.E,expTemp);
+			value = 100*percentHumidity;
+			
+			
 		}
+		ReadingStatus status = ReadingStatus.ON;
+		if (value >= WARN_THRESHOLD) status = ReadingStatus.WARN;
+		if (value >= FAULT_THRESHOLD) status = ReadingStatus.FAULT;	
 		
-		lastValue = v;
-		int seq = ++sequence;
-		return new SensorReading(getSensorId(), time, seq, v, status);
+		return new SensorReading(getSensorId(), System.currentTimeMillis(), sequence++, value, status);
+		
 	}
 
 }
