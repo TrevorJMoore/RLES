@@ -58,16 +58,31 @@ public class AmbientHumiditySensor extends Sensor {
 	// Generate our AmbientHumidity reading using the simulator context
 	@Override
 	public SensorReading generateReading() {
-		double temp = context.getLatest(temperatureSensor.getSensorId()).getValue();
-		double dewpoint = context.getLatest(dewpointSensor.getSensorId()).getValue();
-		
-		// These calculations come from the University of Miami: https://bmcnoldy.earth.miami.edu/Humidity.html
-		// where they use approximations of Magnus coefficients in their relative humidity equation
-		double expDew = (17.625*dewpoint)/(243.04+dewpoint);
-		double expTemp = (17.625*temp)/(243.04+temp);
-		double percentHumidity = Math.pow(Math.E, expDew)/Math.pow(Math.E,expTemp);
-		double value = 100*percentHumidity;
-		
+		double value;
+		if (temperatureSensor == null || dewpointSensor == null) {
+			double base;
+			if (lastValue == null) {
+				base = gen.uniform(10.0, 15.0);
+			} else {
+				base = gen.randomWalkClamped(lastValue,  MAX_STEP,  MIN,  MAX);
+				base += gen.gaussian(0, NOISE_SIGMA);
+			}
+			value = gen.quantize(base, GRAIN);
+			lastValue = value;
+		}
+		else {
+			double temp = context.getLatest(temperatureSensor.getSensorId()).getValue();
+			double dewpoint = context.getLatest(dewpointSensor.getSensorId()).getValue();
+			
+			// These calculations come from the University of Miami: https://bmcnoldy.earth.miami.edu/Humidity.html
+			// where they use approximations of Magnus coefficients in their relative humidity equation
+			double expDew = (17.625*dewpoint)/(243.04+dewpoint);
+			double expTemp = (17.625*temp)/(243.04+temp);
+			double percentHumidity = Math.pow(Math.E, expDew)/Math.pow(Math.E,expTemp);
+			value = 100*percentHumidity;
+			
+			
+		}
 		ReadingStatus status = ReadingStatus.ON;
 		if (value >= WARN_THRESHOLD) status = ReadingStatus.WARN;
 		if (value >= FAULT_THRESHOLD) status = ReadingStatus.FAULT;	
