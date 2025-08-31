@@ -52,7 +52,7 @@ public class Simulator {
 		}
 	}
 	
-	// Connect to transport and start stream (if needed), then schdule all sensors
+	// Connect to transport and start stream (if needed), then schedule all sensors
 	public synchronized void start() throws IOException {
 		if (running) return;
 		

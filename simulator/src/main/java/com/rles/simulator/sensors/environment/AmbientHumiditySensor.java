@@ -28,38 +28,41 @@ public class AmbientHumiditySensor extends Sensor {
 	private final ReadingGenerator gen;
 	private Double lastValue = null;
 	private int sequence = 0;
-	private SimulatorContext context;
-	private Sensor temperatureSensor;
-	private Sensor dewpointSensor;
+	private final SimulatorContext context;
+	private final Integer tempSensorId;
+	private final Integer dewpointSensorId;
 	
 	// Constructors
-	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, SimulatorContext context) {
+	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode) {
+		super(sensorId, sensorName, DataType.FLOAT, unitCode);
+		this.gen = new ReadingGenerator();
+		this.context = null;
+		this.tempSensorId = null;
+		this.dewpointSensorId = null;
+	}
+	
+	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, SimulatorContext context, Integer tempSensorId, Integer dewpointSensorId) {
 		super(sensorId, sensorName, DataType.FLOAT, unitCode);
 		this.gen = new ReadingGenerator();
 		this.context = context;
+		this.tempSensorId = tempSensorId;
+		this.dewpointSensorId = dewpointSensorId;
 	}
 	
-	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, SimulatorContext context, long seed) {
+	public AmbientHumiditySensor(int sensorId, String sensorName, int unitCode, SimulatorContext context, Integer tempSensorId, Integer dewpointSensorId, long seed) {
 		super(sensorId, sensorName, DataType.FLOAT, unitCode);
 		this.gen = new ReadingGenerator(seed);
 		this.context = context;
+		this.tempSensorId = tempSensorId;
+		this.dewpointSensorId = dewpointSensorId;
 	}
-	
-	// Methods
-	public void linkTemperatureSensor(Sensor temperatureSensor) {
-		this.temperatureSensor = temperatureSensor;
-	}
-	
-	public void linkDewPointSensor(Sensor dewpointSensor) {
-		this.dewpointSensor = dewpointSensor;
-	}
-	
+		
 
 	// Generate our AmbientHumidity reading using the simulator context
 	@Override
 	public SensorReading generateReading() {
 		double value;
-		if (temperatureSensor == null || dewpointSensor == null) {
+		if (tempSensorId == null || dewpointSensorId == null || context == null) {
 			double base;
 			if (lastValue == null) {
 				base = gen.uniform(10.0, 15.0);
@@ -71,8 +74,8 @@ public class AmbientHumiditySensor extends Sensor {
 			lastValue = value;
 		}
 		else {
-			double temp = context.getLatest(temperatureSensor.getSensorId()).getValue();
-			double dewpoint = context.getLatest(dewpointSensor.getSensorId()).getValue();
+			double temp = context.getLatest(tempSensorId).getValue();
+			double dewpoint = context.getLatest(dewpointSensorId).getValue();
 			
 			// These calculations come from the University of Miami: https://bmcnoldy.earth.miami.edu/Humidity.html
 			// where they use approximations of Magnus coefficients in their relative humidity equation

@@ -86,7 +86,7 @@ public class Encoder {
 	
 	// Get current version of the frame schema
 	public String getVersion() {
-		return this.VERSION;
+		return Encoder.VERSION;
 	}
 	
 }
