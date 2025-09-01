@@ -32,6 +32,8 @@ public class SimulatorMain {
 		// Create sensors
 		Sensor temp = new AmbientTemperatureSensor(1001, "Ambient Temp");
 		Sensor dew = new DewPointSensor(1002, "Dew Point");
+		
+		// Create contextual sensors - Require dependent sensors to exist first
 		Sensor humidity = new AmbientHumiditySensor(1003, "Relative Humidity", context, temp.getSensorId(), dew.getSensorId());
 		
 		

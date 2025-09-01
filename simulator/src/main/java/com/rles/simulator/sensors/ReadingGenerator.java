@@ -46,6 +46,14 @@ public class ReadingGenerator {
 	}
 	
 	// Random-walk
+		public double randomWalk(double prev, double maxStep) {
+			// Step from prev with maxStep
+			double step = (generator.nextDouble() * 2.0 - 1.0) * maxStep;
+			double v = prev + step;
+			
+			return v;
+		}
+	
 	public double randomWalkClamped(double prev, double maxStep, double min, double max) {
 		// Step from prev with maxStep
 		double step = (generator.nextDouble() * 2.0 - 1.0) * maxStep;
