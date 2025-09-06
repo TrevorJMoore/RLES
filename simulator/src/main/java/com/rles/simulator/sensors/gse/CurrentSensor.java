@@ -6,6 +6,8 @@ import com.rles.simulator.sensors.SensorReading;
 
 public class CurrentSensor extends Sensor {
 
+	
+	
 	public CurrentSensor(int sensorId, String sensorName, DataType measurementType, int unitCode) {
 		super(sensorId, sensorName, measurementType, unitCode);
 		// TODO
