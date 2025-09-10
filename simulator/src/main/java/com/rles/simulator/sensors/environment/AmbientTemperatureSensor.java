@@ -12,7 +12,7 @@ public class AmbientTemperatureSensor extends Sensor {
 	private static final double MIN = -60.0; // Celsius
 	private static final double MAX = 100.0; // Celsius
 	private static final double GRAIN = 0.01;
-	private static final double MAX_STEP = 0.5;
+	private static final double MAX_STEP = 0.01;
 	private static final double NOISE_SIGMA = 0.2;
 	private static final double WARN_THRESHOLD = 50.0;
 	private static final double FAULT_THRESHOLD = 60.0;
